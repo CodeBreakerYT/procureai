@@ -56,6 +56,18 @@ export const mockProjects: ProcurementProject[] = [
     vendorCount: 0,
     requirementCount: 4,
   },
+  {
+    id: "artist-consignment",
+    name: "Artist Consignment Partnership",
+    category: "Facilities & Operations",
+    budget: 50000,
+    durationMonths: 6,
+    description: "Evaluating independent artists' proposals to display and sell work on consignment in the gallery.",
+    status: "draft",
+    createdAt: "2026-08-30",
+    vendorCount: 0,
+    requirementCount: 7,
+  },
 ];
 
 export const mockRequirements: Record<string, Requirement[]> = {
@@ -88,6 +100,15 @@ export const mockRequirements: Record<string, Requirement[]> = {
     { id: "r2", label: "SIEM + EDR in one console", priority: "high", status: "pending" },
     { id: "r3", label: "Compliance reporting (ISO 27001)", priority: "mandatory", status: "pending" },
     { id: "r4", label: "On-call incident response", priority: "high", status: "pending" },
+  ],
+  "artist-consignment": [
+    { id: "r1", label: "Commission / revenue split disclosed", priority: "mandatory", status: "pending" },
+    { id: "r2", label: "Consignment period ≥ 3 months", priority: "high", status: "pending" },
+    { id: "r3", label: "Insurance coverage for displayed work", priority: "mandatory", status: "pending" },
+    { id: "r4", label: "Clear unsold-work policy", priority: "high", status: "pending" },
+    { id: "r5", label: "Verifiable prior gallery track record", priority: "medium", status: "pending" },
+    { id: "r6", label: "Delivery & pickup logistics defined", priority: "medium", status: "pending" },
+    { id: "r7", label: "Exclusivity terms defined", priority: "medium", status: "pending" },
   ],
 };
 

@@ -1,0 +1,34 @@
+ABOUT THIS DATA — ERP Software Selection (5 synthetic vendor proposals)
+==========================================================================
+These 5 PDFs are DEMO DATA — realistic vendor proposals written for this
+demo, not real companies or real submitted bids. Say so if asked; there's
+nothing to hide, they're built to show off the extraction/scoring pipeline
+clearly. All 5 verified working through the real /analyze endpoint.
+
+ONE-LINE STORY PER VENDOR (use these live during the demo):
+
+1. Nimbus ERP — NimbusERP.pdf
+   The well-rounded winner. ₹22L, 99.9% SLA, full SSO+API, ISO 27001,
+   10-week rollout. AI score: 83/100, 81% requirement match.
+
+2. Vertex Enterprise Suite — VertexEnterpriseSuite.pdf
+   Priciest (₹35L) and best raw SLA (99.95%), but the contract has a real
+   trap: a hidden 36-month minimum term and a 50% early-exit penalty.
+
+3. QuantumFin ERP — QuantumFinERP.pdf
+   Cheapest (₹18L) — but has NO native SSO, which is a mandatory
+   requirement. Cheap on paper, non-compliant in practice.
+
+4. Orbital Suite ERP — OrbitalSuiteERP.pdf
+   Solid runner-up to Nimbus — same core strengths, slightly slower
+   14-week rollout.
+
+5. Keystone Hybrid ERP — KeystoneHybridERP.pdf
+   Mid-price, but data is hosted in Singapore/US only — fails India data
+   residency, a compliance dealbreaker for most Indian companies.
+
+EXPECTED RESULT: Nimbus ERP and Orbital Suite ERP score highest; Keystone
+and QuantumFin get flagged risks for compliance/mandatory-requirement gaps.
+
+Form values for /projects/new or the existing "ERP Software Selection" demo
+project: category "Enterprise Software", 24 months, budget ₹25,00,000.

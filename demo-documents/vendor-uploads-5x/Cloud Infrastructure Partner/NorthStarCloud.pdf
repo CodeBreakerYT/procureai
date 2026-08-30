@@ -1,0 +1,123 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1158 >>
+stream
+BT
+/F1 11 Tf
+15 TL
+56 736 Td
+/F2 11.5 Tf
+(NORTHSTAR CLOUD) Tj
+T*
+/F1 11 Tf
+(Managed multi-region cloud infrastructure) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F1 11 Tf
+(Proposal for: Cloud Infrastructure Partner) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(PRICE) Tj
+T*
+/F1 11 Tf
+(- INR 40,00,000 for 36 months, billed quarterly) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(SLA) Tj
+T*
+/F1 11 Tf
+(- 99.95% uptime  just under the required 99.99%) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(SUPPORT) Tj
+T*
+/F1 11 Tf
+(- 24/7 NOC with a dedicated Slack channel, 15-minute response for critical incidents) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(KEY FEATURES) Tj
+T*
+/F1 11 Tf
+(- Active-active failover across 3 regions) Tj
+T*
+/F1 11 Tf
+(- Kubernetes-native tooling) Tj
+T*
+/F1 11 Tf
+(- Full Terraform support) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(COMPLIANCE) Tj
+T*
+/F1 11 Tf
+(- SOC 2 Type II and ISO 27001 certified) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(IMPLEMENTATION) Tj
+T*
+/F1 11 Tf
+(- 8-week migration with a dedicated engineer) Tj
+T*
+/F1 11 Tf
+() Tj
+T*
+/F2 11.5 Tf
+(CONTRACT TERMS) Tj
+T*
+/F1 11 Tf
+(- Cancel with 90 days notice) Tj
+T*
+/F1 11 Tf
+(- No penalty for scaling up or down) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000185 00000 n 
+0000000260 00000 n 
+0000000396 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1606
+%%EOF

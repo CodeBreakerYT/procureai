@@ -1,0 +1,21 @@
+ProcureAI — "New Project" form values for this folder
+=======================================================
+Paste these into /projects/new (or use them as reference when opening the
+existing "ERP Software Selection" demo project's Requirements/Upload tabs).
+
+Project name:          ERP Software Selection
+Procurement category:  Enterprise Software
+Contract duration:     24 (months)
+Budget (INR):          25,00,000
+Description:
+Selecting a new ERP platform to unify finance, inventory, and HR operations
+across the company. Evaluating vendors on price, SLA, native SSO/REST API
+support, ISO 27001 compliance, and implementation timeline.
+
+Documents in this folder (upload all 5 on the "Upload Proposals" tab) — see
+ABOUT-THIS-DATA.txt for the one-line story per vendor to use in your demo:
+  1. NimbusERP.pdf
+  2. VertexEnterpriseSuite.pdf
+  3. QuantumFinERP.pdf
+  4. OrbitalSuiteERP.pdf
+  5. KeystoneHybridERP.pdf
