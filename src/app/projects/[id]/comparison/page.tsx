@@ -6,6 +6,7 @@ import { ProjectTabs } from "@/components/procurement/ProjectTabs";
 import { ProjectAssistantSync } from "@/components/procurement/ProjectAssistantSync";
 import { ComparisonTable } from "@/components/procurement/ComparisonTable";
 import { ScoreChart } from "@/components/procurement/ScoreChart";
+import { DownloadReportButton } from "@/components/procurement/DownloadReportButton";
 import { Button } from "@/components/ui/button";
 import { getProject, getVendors } from "@/lib/server-store";
 
@@ -14,7 +15,7 @@ export default async function ComparisonPage({ params }: PageProps<"/projects/[i
   const project = getProject(id);
   if (!project) notFound();
 
-  const vendors = getVendors(id).filter((v) => v.status === "analyzed");
+  const vendors = (await getVendors(id)).filter((v) => v.status === "analyzed");
 
   return (
     <AppShell title="Vendor Comparison" subtitle={`Side-by-side comparison for ${project.name}.`}>
@@ -26,6 +27,7 @@ export default async function ComparisonPage({ params }: PageProps<"/projects/[i
         <ComparisonTable vendors={vendors} />
 
         <div className="flex justify-end gap-3">
+          <DownloadReportButton projectName={project.name} vendors={vendors} />
           <Button variant="secondary" asChild>
             <Link href={`/projects/${id}/risks`}>View Risk Analysis</Link>
           </Button>

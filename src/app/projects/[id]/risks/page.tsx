@@ -13,7 +13,7 @@ export default async function RisksPage({ params }: PageProps<"/projects/[id]/ri
   const project = getProject(id);
   if (!project) notFound();
 
-  const risks = getAllRisksLive(id);
+  const risks = await getAllRisksLive(id);
 
   return (
     <AppShell title="Risk Analysis" subtitle={`Risks NOVA detected across proposals for ${project.name}.`}>

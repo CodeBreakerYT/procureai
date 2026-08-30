@@ -14,7 +14,7 @@ export default async function UploadPage({ params }: PageProps<"/projects/[id]/u
     <AppShell title="Upload Proposals" subtitle={`Add vendor proposals for ${project.name}.`}>
       <ProjectAssistantSync name={project.name} id={id} />
       <ProjectTabs projectId={id} />
-      <VendorUploadZone projectId={id} initialVendors={getVendors(id)} />
+      <VendorUploadZone projectId={id} initialVendors={await getVendors(id)} />
     </AppShell>
   );
 }

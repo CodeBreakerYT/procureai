@@ -15,8 +15,8 @@ export default async function ProjectOverviewPage({ params }: PageProps<"/projec
   const project = getProject(id);
   if (!project) notFound();
 
-  const requirements = getRequirements(id);
-  const vendors = getVendors(id);
+  const requirements = await getRequirements(id);
+  const vendors = await getVendors(id);
 
   return (
     <AppShell title={project.name} subtitle={project.category}>

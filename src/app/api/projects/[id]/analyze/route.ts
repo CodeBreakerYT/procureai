@@ -36,11 +36,11 @@ export async function POST(request: Request, ctx: RouteContext<"/api/projects/[i
       fileType,
       fileSizeKb: Math.round(buffer.byteLength / 1024),
       buffer,
-      requirements: getRequirements(projectId),
+      requirements: await getRequirements(projectId),
       budget: project.budget,
     });
 
-    upsertVendor(projectId, vendor);
+    await upsertVendor(projectId, vendor);
     return NextResponse.json({ vendor });
   } catch (err) {
     console.error("[analyze] extraction failed", err);

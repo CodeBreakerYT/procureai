@@ -8,7 +8,7 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
 
   const handleLogout = async () => {
     await fetch("/api/login", { method: "DELETE" });
-    router.push("/login");
+    router.push("/");
     router.refresh();
   };
 

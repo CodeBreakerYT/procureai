@@ -18,7 +18,7 @@ export default async function RequirementsPage({ params }: PageProps<"/projects/
       <ProjectAssistantSync name={project.name} id={id} />
       <ProjectTabs projectId={id} />
 
-      <RequirementBoard projectId={id} initial={getRequirements(id)} />
+      <RequirementBoard projectId={id} initial={await getRequirements(id)} />
 
       <div className="mt-6 flex justify-end">
         <Button asChild>

@@ -11,12 +11,12 @@ export default async function RecommendationPage({ params }: PageProps<"/project
   const project = getProject(id);
   if (!project) notFound();
 
-  const vendor = getTopVendorLive(id);
+  const vendor = await getTopVendorLive(id);
 
   if (vendor && !vendor.summary) {
-    const others = getVendors(id).filter((v) => v.status === "analyzed" && v.id !== vendor.id);
+    const others = (await getVendors(id)).filter((v) => v.status === "analyzed" && v.id !== vendor.id);
     vendor.summary = await generateRecommendationNarrative(vendor, others);
-    upsertVendor(id, vendor);
+    await upsertVendor(id, vendor);
   }
 
   return (

@@ -11,8 +11,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ reply: getMockChatResponse(message) });
   }
 
-  const vendors = getVendors(projectId).filter((v) => v.status === "analyzed");
-  const requirements = getRequirements(projectId);
+  const vendors = (await getVendors(projectId)).filter((v) => v.status === "analyzed");
+  const requirements = await getRequirements(projectId);
 
   if (vendors.length === 0) {
     return NextResponse.json({ reply: getMockChatResponse(message) });

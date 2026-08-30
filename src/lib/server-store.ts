@@ -1,19 +1,24 @@
 import fs from "fs";
 import path from "path";
+import { getStore } from "@netlify/blobs";
 import { getProject, mockRequirements, mockVendors } from "./mock-data";
 import type { Requirement, Vendor } from "./types";
 
 // ---------------------------------------------------------------------------
-// File-backed per-project store for the live backend.
+// Per-project store for the live backend.
 //
-// This is a prototype persistence layer: it seeds from mock-data.ts on first
-// access, then holds real analysis results (uploaded + Groq-analyzed
-// vendors, edited requirements) in a local JSON file. A plain in-memory Map
-// isn't reliable here — Next.js dev mode (Turbopack) can reload route
-// modules between requests, silently resetting module-level state — so this
-// writes through to disk on every mutation. Swap this module for a real
-// database without touching any route handler signatures — every function
-// here is the only thing callers depend on.
+// On Netlify, this reads/writes through Netlify Blobs — durable storage tied
+// to the site, so uploaded vendor data survives across serverless function
+// invocations (a plain local JSON file does NOT: Netlify functions can run on
+// a fresh, throwaway filesystem per invocation, so a file written by one
+// upload request may simply not exist for the next page load).
+//
+// In local `next dev` (no Netlify runtime present), it falls back to the
+// same local JSON file this used before — Blobs needs Netlify's runtime
+// context, which plain `next dev` doesn't provide.
+//
+// Swap this module for a different backing store without touching any route
+// handler — every function here is the only thing callers depend on.
 // ---------------------------------------------------------------------------
 
 interface ProjectData {
@@ -24,8 +29,24 @@ interface ProjectData {
 type StoreFile = Record<string, ProjectData>;
 
 const STORE_PATH = path.join(process.cwd(), ".data", "store.json");
+const BLOB_STORE_NAME = "procureai-data";
+const BLOB_KEY = "store.json";
 
-function readAll(): StoreFile {
+function isNetlifyRuntime(): boolean {
+  return !!process.env.NETLIFY || !!process.env.NETLIFY_BLOBS_CONTEXT;
+}
+
+async function readAll(): Promise<StoreFile> {
+  if (isNetlifyRuntime()) {
+    try {
+      const store = getStore(BLOB_STORE_NAME);
+      const data = await store.get(BLOB_KEY, { type: "json" });
+      return (data as StoreFile) ?? {};
+    } catch (err) {
+      console.error("[server-store] Netlify Blobs read failed, falling back to empty store", err);
+      return {};
+    }
+  }
   try {
     const raw = fs.readFileSync(STORE_PATH, "utf-8");
     return JSON.parse(raw) as StoreFile;
@@ -34,7 +55,12 @@ function readAll(): StoreFile {
   }
 }
 
-function writeAll(data: StoreFile) {
+async function writeAll(data: StoreFile): Promise<void> {
+  if (isNetlifyRuntime()) {
+    const store = getStore(BLOB_STORE_NAME);
+    await store.setJSON(BLOB_KEY, data);
+    return;
+  }
   fs.mkdirSync(path.dirname(STORE_PATH), { recursive: true });
   fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
@@ -49,38 +75,38 @@ function ensure(all: StoreFile, projectId: string): ProjectData {
   return all[projectId];
 }
 
-export function getRequirements(projectId: string): Requirement[] {
-  const all = readAll();
+export async function getRequirements(projectId: string): Promise<Requirement[]> {
+  const all = await readAll();
   return ensure(all, projectId).requirements;
 }
 
-export function setRequirements(projectId: string, requirements: Requirement[]) {
-  const all = readAll();
+export async function setRequirements(projectId: string, requirements: Requirement[]): Promise<void> {
+  const all = await readAll();
   ensure(all, projectId).requirements = requirements;
-  writeAll(all);
+  await writeAll(all);
 }
 
-export function getVendors(projectId: string): Vendor[] {
-  const all = readAll();
+export async function getVendors(projectId: string): Promise<Vendor[]> {
+  const all = await readAll();
   return ensure(all, projectId).vendors;
 }
 
-export function upsertVendor(projectId: string, vendor: Vendor) {
-  const all = readAll();
+export async function upsertVendor(projectId: string, vendor: Vendor): Promise<void> {
+  const all = await readAll();
   const data = ensure(all, projectId);
   const idx = data.vendors.findIndex((v) => v.id === vendor.id);
   if (idx >= 0) data.vendors[idx] = vendor;
   else data.vendors.push(vendor);
-  writeAll(all);
+  await writeAll(all);
 }
 
-export function getAllRisksLive(projectId: string) {
-  const vendors = getVendors(projectId);
+export async function getAllRisksLive(projectId: string) {
+  const vendors = await getVendors(projectId);
   return vendors.flatMap((v) => v.risks.map((r) => ({ ...r, vendorId: v.id, vendorName: v.name })));
 }
 
-export function getTopVendorLive(projectId: string): Vendor | undefined {
-  const vendors = getVendors(projectId).filter((v) => v.status === "analyzed");
+export async function getTopVendorLive(projectId: string): Promise<Vendor | undefined> {
+  const vendors = (await getVendors(projectId)).filter((v) => v.status === "analyzed");
   if (vendors.length === 0) return undefined;
   return [...vendors].sort((a, b) => b.aiScore - a.aiScore)[0];
 }
