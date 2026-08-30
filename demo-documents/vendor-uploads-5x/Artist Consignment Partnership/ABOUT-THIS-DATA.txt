@@ -1,0 +1,38 @@
+ABOUT THIS DATA — Artist Consignment Partnership (3 synthetic vendor proposals)
+==================================================================================
+These 3 PDFs are DEMO DATA — realistic artist consignment proposals written
+for this demo, not real people or real submitted offers. Say so if asked.
+All 3 verified working through the real /analyze endpoint.
+
+This project already exists in the app (Projects → Artist Consignment
+Partnership, category "Facilities & Operations", ₹50,000 budget, 6 months).
+Just open it and upload these 3 PDFs on the "Upload Proposals" tab.
+
+ONE-LINE STORY PER ARTIST (use these live during the demo):
+
+1. Susan Layne Sanders — SusanLayneSanders.pdf
+   THE WINNER. Standard 60/40 split favoring the artist, artist carries her
+   own insurance, clear unsold-work policy, proven track record (2 other
+   galleries), reasonable non-exclusivity radius.
+
+2. Marcus Webb — MarcusWebb.pdf
+   Looks great on paper — gallery keeps a huge 80% commission — but that's
+   the bait: no insurance, no unsold-work policy, no prior gallery
+   experience at all. The cheap-looking deal with real hidden risk.
+
+3. Elena Voss — ElenaVoss.pdf
+   Most prestigious artist (5 galleries, press coverage), but demands full
+   exclusivity (no other landscape/mixed-media artist allowed during the
+   term), a 12-month minimum lock-in, and pushes insurance cost onto the
+   gallery. Premium reputation, restrictive terms.
+
+EXPECTED RESULT: Susan Layne Sanders should score highest on a balanced
+risk/reward basis; Marcus Webb should get flagged for the missing
+insurance/unsold-policy risks despite the attractive commission split;
+Elena Voss should get flagged for the exclusivity lock-in despite the
+strongest résumé.
+
+This is also a good moment to point out that most "procurement-style"
+fields (SLA, API support, security certifications) will correctly read as
+not applicable/not disclosed for all three — this isn't a software
+purchase, and NOVA doesn't force-fit irrelevant fields.
