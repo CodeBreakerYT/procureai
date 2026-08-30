@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Ear, Loader2, Mic, Sparkles as SparklesIcon, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AssistantState } from "@/lib/types";
+import { useAssistantStore } from "@/store/assistant-store";
+import { AnyaAvatar } from "./AnyaAvatar";
 import { AssistantOrb } from "./AssistantOrb";
 
 // ---------------------------------------------------------------------------
@@ -14,7 +16,8 @@ import { AssistantOrb } from "./AssistantOrb";
 //
 //   Assistant Logic (store) -> Assistant State (props) -> Assistant Visual (slot)
 //
-// To swap in a future GLB/GLTF 3D avatar:
+// Today's `visual` default is <AnyaAvatar />, a real FBX character. To swap
+// in a future GLB/GLTF 3D avatar instead:
 //   <AIAssistant visual={<AvatarModel url="/models/nova.glb" state={state} />} />
 // Everything else (dashboard, panels, pages) stays untouched.
 // ---------------------------------------------------------------------------
@@ -34,12 +37,20 @@ export interface AIAssistantProps {
   showStatusBadge?: boolean;
   showCaption?: boolean;
   /**
-   * Swappable visual slot. Defaults to the placeholder <AssistantOrb />.
+   * Swappable visual slot. Defaults to <AnyaAvatar />.
    * Replace with a future <AvatarModel /> (R3F + GLTF loader) without
    * touching any consumer of <AIAssistant />.
    */
   visual?: React.ReactNode;
   className?: string;
+  /** Forwarded to the default <AnyaAvatar /> visual. Ignored when `visual` is set. */
+  cameraMode?: "full" | "face";
+  /** Forwarded to the default <AnyaAvatar /> visual. Ignored when `visual` is set. */
+  rotatable?: boolean;
+  /** Forwarded to the default <AnyaAvatar /> visual. Ignored when `visual` is set. */
+  resultGesture?: "yes" | "no" | null;
+  /** Forwarded to the default <AnyaAvatar /> visual. Ignored when `visual` is set. */
+  onResultGestureDone?: () => void;
 }
 
 const SIZE_MAP: Record<NonNullable<AIAssistantProps["size"]>, string> = {
@@ -57,9 +68,14 @@ export function AIAssistant({
   showCaption = true,
   visual,
   className,
+  cameraMode,
+  rotatable,
+  resultGesture,
+  onResultGestureDone,
 }: AIAssistantProps) {
   const meta = STATE_META[state];
   const Icon = meta.icon;
+  const avatar3DEnabled = useAssistantStore((s) => s.avatar3DEnabled);
 
   return (
     <div className={cn("flex flex-col items-center gap-4", className)}>
@@ -100,7 +116,19 @@ export function AIAssistant({
         </AnimatePresence>
 
         <div className="absolute inset-[6%] rounded-full overflow-hidden">
-          {visual ?? <AssistantOrb state={state} className="h-full w-full" />}
+          {visual ??
+            (avatar3DEnabled ? (
+              <AnyaAvatar
+                state={state}
+                className="h-full w-full"
+                cameraMode={cameraMode}
+                rotatable={rotatable}
+                resultGesture={resultGesture}
+                onResultGestureDone={onResultGestureDone}
+              />
+            ) : (
+              <AssistantOrb state={state} className="h-full w-full" />
+            ))}
         </div>
       </div>
 

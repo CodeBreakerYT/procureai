@@ -23,6 +23,7 @@ export function AnalysisSequence({ projectId }: { projectId: string }) {
   const { state, caption, setState, say } = useAssistantStore();
   const [activeStep, setActiveStep] = React.useState(-1);
   const [done, setDone] = React.useState(false);
+  const [resultGesture, setResultGesture] = React.useState<"yes" | "no" | null>(null);
 
   React.useEffect(() => {
     setState("analyzing", "I'm analyzing the proposals.");
@@ -31,9 +32,27 @@ export function AnalysisSequence({ projectId }: { projectId: string }) {
       timers.push(setTimeout(() => setActiveStep(i), 700 + i * 1000));
     });
     timers.push(
-      setTimeout(() => {
+      setTimeout(async () => {
         setDone(true);
-        say("Analysis complete. Vendor A comes out on top — take a look at the comparison.");
+        // A real winner with no high-severity risk reads as a confident "yes"
+        // nod; anything shakier (no analyzed vendor yet, or a flagged high
+        // risk) reads as a "no" head-shake instead of a blind thumbs-up.
+        let positive = false;
+        try {
+          const res = await fetch(`/api/projects/${projectId}/recommendation`);
+          const data = (await res.json()) as {
+            vendor: { name: string; aiScore: number; risks: { level: string }[] } | null;
+          };
+          positive = !!data.vendor && data.vendor.aiScore >= 60 && !data.vendor.risks.some((r) => r.level === "high");
+          say(
+            data.vendor
+              ? `Analysis complete. ${data.vendor.name} comes out on top — take a look at the comparison.`
+              : "Analysis complete — take a look at the comparison."
+          );
+        } catch {
+          say("Analysis complete. Vendor A comes out on top — take a look at the comparison.");
+        }
+        setResultGesture(positive ? "yes" : "no");
       }, 700 + STEPS.length * 1000 + 400)
     );
     return () => timers.forEach(clearTimeout);
@@ -43,7 +62,13 @@ export function AnalysisSequence({ projectId }: { projectId: string }) {
   return (
     <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-start">
       <Card className="flex flex-col items-center p-8 text-center lg:sticky lg:top-8">
-        <AIAssistant state={state} caption={caption} size="lg" />
+        <AIAssistant
+          state={state}
+          caption={caption}
+          size="lg"
+          resultGesture={resultGesture}
+          onResultGestureDone={() => setResultGesture(null)}
+        />
       </Card>
 
       <Card>

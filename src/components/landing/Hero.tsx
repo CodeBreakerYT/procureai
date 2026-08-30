@@ -93,7 +93,14 @@ export function Hero() {
           <p className="relative mb-2 text-xs font-medium uppercase tracking-[0.2em] text-foreground/40">
             Meet NOVA
           </p>
-          <AIAssistant state={state} caption={caption} size="xl" className="relative" />
+          <AIAssistant
+            state={state}
+            caption={caption}
+            size="xl"
+            className="relative"
+            cameraMode="full"
+            rotatable
+          />
           <p className="relative mt-2 text-center text-xs text-foreground/40">
             Negotiation &amp; Optimization Virtual Assistant
           </p>

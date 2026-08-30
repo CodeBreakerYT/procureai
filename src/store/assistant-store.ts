@@ -20,6 +20,8 @@ const STATE_CAPTIONS: Record<AssistantState, string> = {
   speaking: "",
 };
 
+const AVATAR_3D_STORAGE_KEY = "procureai:avatar3d";
+
 interface AssistantStore {
   state: AssistantState;
   caption: string;
@@ -27,10 +29,15 @@ interface AssistantStore {
   isExpanded: boolean;
   activeProjectName?: string;
   activeProjectId?: string;
+  /** On by default. When off, <AIAssistant /> falls back to the simple orb instead of the 3D avatar. */
+  avatar3DEnabled: boolean;
 
   setState: (state: AssistantState, caption?: string) => void;
   setExpanded: (expanded: boolean) => void;
   setActiveProject: (name?: string, id?: string) => void;
+  setAvatar3DEnabled: (enabled: boolean) => void;
+  /** Client-only: pulls the saved preference from localStorage after mount, once hydration is safely past. */
+  hydrateAvatar3DPreference: () => void;
   say: (text: string) => void;
   sendUserMessage: (text: string) => Promise<void>;
   reset: () => void;
@@ -52,6 +59,11 @@ export const useAssistantStore = create<AssistantStore>((set, get) => ({
   isExpanded: false,
   activeProjectName: undefined,
   activeProjectId: undefined,
+  // Always starts true so the very first client render matches the
+  // server-rendered HTML exactly (the server has no localStorage to read).
+  // The real saved preference, if any, is applied post-mount instead — see
+  // hydrateAvatar3DPreference — which avoids a hydration mismatch.
+  avatar3DEnabled: true,
 
   setState: (state, caption) => {
     set({ state, caption: caption ?? STATE_CAPTIONS[state] });
@@ -59,6 +71,16 @@ export const useAssistantStore = create<AssistantStore>((set, get) => ({
 
   setExpanded: (expanded) => set({ isExpanded: expanded }),
   setActiveProject: (name, id) => set({ activeProjectName: name, activeProjectId: id }),
+  setAvatar3DEnabled: (enabled) => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(AVATAR_3D_STORAGE_KEY, enabled ? "1" : "0");
+    }
+    set({ avatar3DEnabled: enabled });
+  },
+  hydrateAvatar3DPreference: () => {
+    const stored = window.localStorage.getItem(AVATAR_3D_STORAGE_KEY);
+    if (stored !== null) set({ avatar3DEnabled: stored === "1" });
+  },
 
   say: (text) => {
     if (speakTimeout) clearTimeout(speakTimeout);

@@ -13,7 +13,11 @@ import { cn } from "@/lib/utils";
  * so the assistant's identity and conversation continue across every route.
  */
 export function AssistantDock() {
-  const { state, caption, isExpanded, setExpanded, activeProjectName } = useAssistantStore();
+  const { state, caption, isExpanded, setExpanded, activeProjectName, hydrateAvatar3DPreference } = useAssistantStore();
+
+  React.useEffect(() => {
+    hydrateAvatar3DPreference();
+  }, [hydrateAvatar3DPreference]);
 
   return (
     <>
@@ -29,7 +33,7 @@ export function AssistantDock() {
             <div className="mb-3 flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 shrink-0">
-                  <AIAssistant state={state} size="sm" showCaption={false} showStatusBadge={false} />
+                  <AIAssistant state={state} size="sm" showCaption={false} showStatusBadge={false} cameraMode="face" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">NOVA</p>
@@ -68,7 +72,7 @@ export function AssistantDock() {
             )}
             aria-label="Open NOVA assistant"
           >
-            <AIAssistant state={state} size="sm" showCaption={false} showStatusBadge={false} />
+            <AIAssistant state={state} size="sm" showCaption={false} showStatusBadge={false} cameraMode="face" />
           </motion.button>
         )}
       </AnimatePresence>

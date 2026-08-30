@@ -11,7 +11,7 @@ import { AIAssistant } from "@/components/assistant/AIAssistant";
 import { useAssistantStore } from "@/store/assistant-store";
 
 export default function SettingsPage() {
-  const { state, caption } = useAssistantStore();
+  const { state, caption, avatar3DEnabled, setAvatar3DEnabled } = useAssistantStore();
 
   return (
     <AppShell title="Settings" subtitle="Manage your organization, NOVA, and preferences.">
@@ -63,8 +63,9 @@ export default function SettingsPage() {
               <Separator />
               <SettingRow
                 title="3D avatar visualization"
-                desc="Replace NOVA's orb with a full 3D animated avatar (GLB/GLTF)."
-                badge="Coming soon"
+                desc="Show NOVA as a full animated 3D character. Turn off to use the simple orb instead."
+                checked={avatar3DEnabled}
+                onCheckedChange={setAvatar3DEnabled}
               />
               <Separator />
               <SettingRow title="Proactive insights" desc="Let NOVA surface risks and savings without being asked." defaultChecked />
@@ -89,8 +90,9 @@ export default function SettingsPage() {
           </p>
           <AIAssistant state={state} caption={caption} size="md" />
           <p className="mt-5 text-xs text-foreground/45">
-            This orb is a temporary placeholder. The assistant container is built to accept a full
-            3D GLB/GLTF avatar without any changes to the rest of the app.
+            {avatar3DEnabled
+              ? "Live preview of NOVA's 3D avatar, reacting to her current state."
+              : "3D avatar is off — NOVA falls back to the simple orb. Toggle it back on above."}
           </p>
         </Card>
       </div>
@@ -103,11 +105,15 @@ function SettingRow({
   desc,
   badge,
   defaultChecked,
+  checked,
+  onCheckedChange,
 }: {
   title: string;
   desc: string;
   badge?: string;
   defaultChecked?: boolean;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }) {
   return (
     <div className="flex items-center justify-between gap-4 py-3.5">
@@ -118,7 +124,11 @@ function SettingRow({
         </div>
         <p className="mt-0.5 text-xs text-foreground/45">{desc}</p>
       </div>
-      <Switch defaultChecked={defaultChecked} disabled={!!badge} />
+      {onCheckedChange ? (
+        <Switch checked={checked} onCheckedChange={onCheckedChange} />
+      ) : (
+        <Switch defaultChecked={defaultChecked} disabled={!!badge} />
+      )}
     </div>
   );
 }
