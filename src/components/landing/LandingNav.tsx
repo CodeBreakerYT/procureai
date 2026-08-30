@@ -20,11 +20,8 @@ export function LandingNav() {
           <a href="#nova" className="hover:text-foreground">Meet NOVA</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/dashboard">Sign in</Link>
-          </Button>
           <Button size="sm" asChild>
-            <Link href="/projects/new">Start Free</Link>
+            <Link href="/dashboard">Sign in</Link>
           </Button>
         </div>
       </div>
